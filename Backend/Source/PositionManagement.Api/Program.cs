@@ -1,7 +1,31 @@
-using PositionManagement.Infrastructure.DependencyInjection.Setup;
+using PositionManagement.Application.DependencyInjection;
+using PositionManagement.Infrastructure.DependencyInjection;
+using PositionManagement.Infrastructure.DependencyInjection.Extensions;
+using PositionManagement.Shared.DependencyInjection;
 
-// Create and configure the default web application using the provided arguments
-var app = DefaultWebApplication.Create(args);
+/// <summary>
+/// Entry point for the PositionManagement API application.
+/// Configures services and middleware for the application.
+/// </summary>
 
-// Run the configured web application
-DefaultWebApplication.Run(app);
+var app = DefaultWebApplication.Create(
+    args: args,
+    webAppBuilder: builder =>
+    {
+        // Configure services for the application
+        builder.Services
+            // Add infrastructure dependencies
+            .AddInfrastructureDI(builder.Configuration)
+            // Add application-level dependencies
+            .AddApplicationDI();
+    }
+);
+
+DefaultWebApplication.Run(
+    webApp: app,
+    configureMiddleware: webApp =>
+    {
+        // Configure middleware for the application
+        MiddlewareExtensions.UseMiddleware(webApp);
+    }
+);

@@ -9,12 +9,18 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Commands\" />
     <Folder Include="Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PositionManagement.Domain\PositionManagement.Domain.csproj" />
+    <ProjectReference Include="..\PositionManagement.Shared\PositionManagement.Shared.csproj" />
   </ItemGroup>
 
 </Project>

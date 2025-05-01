@@ -1,47 +1,32 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PositionManagement.Infrastructure.Filters;
 
 namespace PositionManagement.Infrastructure.DependencyInjection.Extensions
 {
     /// <summary>
-    /// Provides extension methods to configure and use Swagger in the application.
+    /// Contains extension methods to configure Swagger services and customize API documentation.
     /// </summary>
     public static class SwaggerExtensions
     {
         /// <summary>
-        /// Adds Swagger services to the application, including an API key header filter.
+        /// Configures Swagger services and adds a custom API key header filter for enhanced security.
         /// </summary>
-        /// <param name="builder">The application builder.</param>
-        /// <param name="apiKeyHeaderName">The name of the API key header to be used in Swagger.</param>
-        public static void AddSwaggerServices(
-            this IHostApplicationBuilder builder,
+        /// <param name="services">The service collection to which Swagger services will be added.</param>
+        /// <param name="apiKeyHeaderName">The name of the API key header to include in Swagger documentation.</param>
+        /// <returns>The updated service collection with Swagger services configured.</returns>
+        public static IServiceCollection AddSwaggerServices(
+            this IServiceCollection services,
             string apiKeyHeaderName)
         {
-            // Add Swagger generation services to the dependency injection container
-            builder.Services.AddSwaggerGen(c =>
+            // Register Swagger generation services in the dependency injection container
+            services.AddSwaggerGen(c =>
             {
-                // Add a custom operation filter to include the API key header in Swagger documentation
+                // Apply a custom operation filter to include the specified API key header in Swagger documentation
                 c.OperationFilter<ApiKeyHeader>(apiKeyHeaderName);
             });
-        }
 
-        /// <summary>
-        /// Configures the application to use Swagger and Swagger UI in the development environment.
-        /// </summary>
-        /// <param name="webApp">The web application instance.</param>
-        public static void UseSwagger(WebApplication webApp)
-        {
-            // Check if the application is running in the development environment
-            if (webApp.Environment.IsDevelopment())
-            {
-                // Enable the Swagger middleware to serve the generated Swagger JSON
-                webApp.UseSwagger();
-
-                // Enable the Swagger UI middleware to serve the Swagger UI
-                webApp.UseSwaggerUI();
-            }
+            // Return the updated service collection
+            return services;
         }
     }
 }

@@ -2,14 +2,16 @@
 
 ## Project Overview
 
-**PositionManagement** is a Clean Architecture solution built with .NET 8 that provides a modular, maintainable system for managing job positions with full CRUD operations. It uses:
+**PositionManagement** is a Clean Architecture solution built with .NET 8 that provides a modular, maintainable system for managing job positions with full CRUD operations. It incorporates:
 
-- **CQRS** via MediatR for commands and queries
-- **FluentValidation** for request validation
-- **EF Core In-Memory** for persistence during development and testing
-- **Global exception handling** and security middlewares
-- **Pipeline behaviors** for logging and performance metrics
-- **Dependency injection extensions** for modular setup
+- **Generic Repository Pattern** with EF Core for reusable data access, including optional includes on `GetByIdAsync`.
+- **Application Services** for business logic and validations (e.g., uniqueness constraints).
+- **CQRS** via MediatR for commands and queries.
+- **FluentValidation** for request validation.
+- **EF Core In-Memory** provider for persistence in development and testing.
+- **Global Exception Handling** and **API Key Security** via custom middleware.
+- **Pipeline Behaviors** for logging and performance metrics.
+- **Dependency Injection Extensions** for modular service registration.
 
 ## Repository Structure
 
@@ -21,28 +23,34 @@ Backend/                            ⬅ Root folder
 ├── Source/                        ⬅ Application source code
 │   ├── PositionManagement.Api/         ⬅ Web API project
 │   │   • Controllers and endpoints
-│   │   • `DefaultWebApplication` startup orchestration
+│   │   • Startup orchestration via DefaultWebApplication
 │   │
 │   ├── PositionManagement.Application/ ⬅ Application layer
-│   │   • Pipeline behaviors (LoggingBehavior, TimingBehavior)
-│   │   • MediatR and validation DI extensions
+│   │   • Interfaces (IBaseRepository, IPositionService, IRecruiterService, IDepartmentService)
+│   │   • Implementations (GenericRepository, BaseRepository)
+│   │   • Application Services with business validations
+│   │   • Pipeline Behaviors (LoggingBehavior, TimingBehavior)
+│   │   • DI extensions (MediatR, FluentValidation, Services)
 │   │
 │   ├── PositionManagement.Domain/      ⬅ Domain layer
-│   │   • Core entities (Position, Recruiter, Department)
+│   │   • Core entities (Position, Recruiter, Department) implementing IBaseEntity<Guid>
 │   │   • Enums (PositionStatusEnum)
 │   │
 │   ├── PositionManagement.Infrastructure/ ⬅ Infrastructure layer
-│   │   • `PositionManagementDbContext` with EF Core mappings
-│   │   • Filters & Swagger extensions (`ApiKeyHeader`)
-│   │   • Middlewares (ExceptionHandlingMiddleware, ApiKeyMiddleware)
-│   │   • DI & WebApplication builder extensions (Swagger, WebApi, CORS, DbContext, Logging, Middleware)
+│   │   • `PositionManagementDbContext` with EF Core mappings and seed support
+│   │   • Generic `BaseRepository<T, TId>` implementing IRepository with includes
+│   │   • Middleware (`ExceptionHandlingMiddleware`, `ApiKeyMiddleware`)
+│   │   • Swagger filter (`ApiKeyHeader`)
+│   │   • DI extensions (DbContext, Repositories, Services, Swagger, CORS, Logging, Middleware)
 │   │   • `DefaultWebApplication` helper
 │   │
 │   └── PositionManagement.Shared/      ⬅ Shared layer
-│       • Common models (ApiKey)
+│       • Configuration models (ApiKey)
 │       • Shared exceptions and helpers (NotFoundException, ExceptionHelper)
+│       • DI extensions for WebApi, CORS, Logging
 │
 └── Tests/                         ⬅ Unit and integration tests
+
 ```
 
 ## Prerequisites
@@ -52,29 +60,34 @@ Backend/                            ⬅ Root folder
 
 ## Key Features
 
-- **Clean Architecture**: clear separation between API, Application, Domain, Infrastructure, and Shared layers.
-- **Global Exception Handling**: centralized middleware translating exceptions to HTTP responses (400, 401, 403, 404, 500).  
-- **API Key Security**: custom middleware requiring `X-API-KEY` header validated against configuration.  
-- **EF Core In-Memory**: in-memory database for fast setup, ideal for local development and tests.  
-- **Pipeline Behaviors**: LoggingBehavior logs request start/end; TimingBehavior measures execution time.  
-- **Extension Methods**: modular DI setup for MediatR, FluentValidation, EF Core, Swagger, CORS, logging, middleware.  
-- **Domain Entities**: `Position`, `Recruiter`, `Department` with auto-generated GUIDs and navigation properties for `.Include()` queries.  
+- **Generic Repository**: reusable CRUD methods with optional navigation includes and built‑in persistence.
+- **Application Services**: encapsulate business rules (e.g., no duplicate position per recruiter, unique recruiter email/cellphone, unique department names).
+- **CQRS & MediatR**: clear separation of commands and queries, easily testable.
+- **FluentValidation**: robust request validation with detailed error messages.
+- **Global Exception Handling**: centralized middleware mapping exceptions to HTTP responses (400, 401, 403, 404, 500).  
+- **API Key Security**: custom middleware enforcing `X-API-KEY` header.  
+- **EF Core In-Memory**: in-memory database for fast development and testing.  
+- **Pipeline Behaviors**: `LoggingBehavior` logs request flow; `TimingBehavior` measures execution time.  
+- **Modular DI**: extension methods for registering DbContext, repositories, services, MediatR, FluentValidation, Swagger, CORS, logging, and middleware.
+- **Clean Architecture**: strict layering ensures maintainability and testability.
 
 ## Configuration
 
-- **appsettings.json** contains:
-  - `ApiKey` section with `Header` and `Key` values
-  - Logging levels for console output
+- **appsettings.json**:
+  - `ApiKey` section with `Header` and `Key` values.
+  - Logging levels for console output.
+  - `AllowedHosts`.
 
-- **Automatic GUIDs**: primary keys generated by `Guid.NewGuid()` in domain constructors.
-- **String Constraints**: max length enforced in EF Core model configurations.
+- **Automatic GUIDs**: primary keys generated via `Guid.NewGuid()`.
+- **String Constraints**: max length enforced in `OnModelCreating` of `DbContext`.
+- **Seed Data**: optionally add seed entries via `modelBuilder.Entity<...>().HasData(...)`.
 
 ## Conventions
 
-- Projects and namespaces named `PositionManagement.{Layer}`.
-- Middleware under `Source/PositionManagement.Infrastructure/Middleware`.
-- DI extensions under `DependencyInjection/Extensions` folders.
+- Namespaces and projects follow `PositionManagement.{Layer}`.
+- Entity interfaces under `Domain.Entities`, repository interfaces under `Application.Repositories`, services under `Application.Services`, middleware under `Infrastructure.Middleware`.
+- DI extension methods under `DependencyInjection.Extensions` in each layer.
 
 ---
 
-2025 Jhan Carlos del Rio — Senior Full Stack Developer
+© 2025 Jhan Carlos del Rio — Senior Full Stack Developer

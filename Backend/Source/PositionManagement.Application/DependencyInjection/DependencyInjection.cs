@@ -21,6 +21,9 @@ namespace PositionManagement.Application.DependencyInjection
             // Adds MediatR services to the dependency injection container
             services.AddMediatr();
 
+            // Adds Application custom services to the dependency injection container
+            services.AddApplicationServices();
+
             // Returns the updated service collection
             return services;
         }

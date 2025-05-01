@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PositionManagement.Application\PositionManagement.Application.csproj" />
     <ProjectReference Include="..\PositionManagement.Infrastructure\PositionManagement.Infrastructure.csproj" />
   </ItemGroup>
 
