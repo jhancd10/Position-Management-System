@@ -1,0 +1,19 @@
+<mat-card class="dashboard-card" (click)="navigate()">
+
+  <mat-card-header>
+    <mat-card-title>{{ category.title }}</mat-card-title>
+    <mat-card-subtitle>{{ category.subtitle }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content class="card-content">
+    <mat-icon class="card-icon">{{ category.icon }}</mat-icon>
+
+    <div class="card-stats">
+      <div class="stat">
+        <span class="stat-number">{{ category.total() }}</span>
+        <span class="stat-label">Total</span>
+      </div>
+    </div>
+  </mat-card-content>
+  
+</mat-card>

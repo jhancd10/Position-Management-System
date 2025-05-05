@@ -1,0 +1,15 @@
+<div class="dashboard-container">
+  
+  <h1>Home</h1>
+
+  <mat-grid-list [cols]="columns" rowHeight="200px" gutterSize="16px">
+
+    @for (category of categories(); track category) {
+      <mat-grid-tile>
+        <app-category-card [category]="category"></app-category-card>
+      </mat-grid-tile>
+    }
+
+  </mat-grid-list>
+  
+</div>
