@@ -4,7 +4,7 @@
 
   <mat-grid-list [cols]="columns" rowHeight="200px" gutterSize="16px">
 
-    @for (category of categories(); track category) {
+    @for (category of categories(); track category.id) {
       <mat-grid-tile>
         <app-category-card [category]="category"></app-category-card>
       </mat-grid-tile>

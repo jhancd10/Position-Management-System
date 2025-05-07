@@ -16,6 +16,7 @@ export class RecruitersStateService {
   private initialState: State = {
     data: [],
     status: StateStatusEnum.Loading,
+    error: null,
   };
 
   public state = signalSlice({

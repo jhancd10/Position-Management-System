@@ -1,0 +1,23 @@
+.department-list-container {
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 24px;
+  color: rgba(0, 0, 0, 0.54);
+}

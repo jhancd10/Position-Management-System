@@ -3,7 +3,7 @@ import { Department } from "../../departments/interfaces/department.interface";
 import { Recruiter } from "../../recruiters/interfaces/recruiter.interface";
 
 export interface Position {
-    id: string;
+    id?: string;
     title: string;
     description: string;
     location: string;
@@ -12,7 +12,6 @@ export interface Position {
     departmentId: string;
     budget: number;
     closingDate?: Date | null;
-
     recruiter?: Recruiter;
     department?: Department;
 }

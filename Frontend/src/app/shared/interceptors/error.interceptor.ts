@@ -9,6 +9,34 @@ import { inject } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { UiService } from '../services/ui.service';
 
+/**
+ * Interceptor function to handle HTTP errors and provide user-friendly error messages.
+ * 
+ * This function intercepts HTTP requests and processes any errors that occur during the request lifecycle.
+ * It uses the `UiService` to display appropriate error messages to the user based on the HTTP status code.
+ * 
+ * @param req - The HTTP request being intercepted.
+ * @param next - The next handler in the HTTP pipeline.
+ * @returns An observable of the HTTP event, or an error observable if an error occurs.
+ * 
+ * ### Error Handling:
+ * - **400 (Bad Request):** Indicates that one or more fields in the request are invalid.
+ * - **401 (Unauthorized):** Indicates that the API key is missing.
+ * - **403 (Forbidden):** Indicates that the API key is invalid.
+ * - **404 (Not Found):** Indicates that the requested resource does not exist.
+ * - **Default:** Handles any other unexpected errors with a generic error message.
+ * 
+ * ### Example Usage:
+ * This interceptor can be registered in the Angular HTTP interceptor chain to automatically handle errors
+ * for all outgoing HTTP requests.
+ * 
+ * ### Dependencies:
+ * - `UiService`: Used to display error messages to the user.
+ * - `HttpInterceptorFn`: Angular's functional HTTP interceptor type.
+ * - `HttpRequest`, `HttpHandlerFn`, `HttpEvent`: Angular's HTTP request/response types.
+ * - `catchError`: RxJS operator to handle errors in the observable stream.
+ * - `throwError`: RxJS function to propagate errors downstream.
+ */
 export const errorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
