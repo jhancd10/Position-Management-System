@@ -28,6 +28,9 @@ namespace PositionManagement.Application.DependencyInjection.Extensions
 
                 // Add a custom timing behavior to the MediatR pipeline
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TimingBehavior<,>));
+
+                // Add a custom validation behavior to the MediatR pipeline
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             });
 
             // Return the service collection with MediatR configured

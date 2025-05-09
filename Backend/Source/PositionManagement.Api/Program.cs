@@ -23,9 +23,15 @@ var app = DefaultWebApplication.Create(
 
 DefaultWebApplication.Run(
     webApp: app,
+    enableSwaggerDocumentation: true,
     configureMiddleware: webApp =>
     {
         // Configure middleware for the application
         MiddlewareExtensions.UseMiddleware(webApp);
+    },
+    configureSeedDatabase: webApp =>
+    {
+        // Seed the database with initial data
+        DbContextExtensions.SeedDatabase(webApp);
     }
 );

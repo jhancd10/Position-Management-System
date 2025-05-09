@@ -5,17 +5,16 @@ using PositionManagement.Shared.DependencyInjection.Extensions;
 namespace PositionManagement.Shared.DependencyInjection
 {
     /// <summary>
-    /// Provides utility methods to simplify the creation and execution of a web application 
-    /// with default configurations, services, and middleware.
+    /// Provides methods to create and run a web application with default configurations, services, and middleware
     /// </summary>
     public static class DefaultWebApplication
     {
         /// <summary>
-        /// Creates and configures a new instance of a WebApplication with default settings.
+        /// Creates and configures a new instance of a WebApplication with default settings
         /// </summary>
-        /// <param name="args">Command-line arguments for the application.</param>
-        /// <param name="webAppBuilder">An optional action to customize the WebApplicationBuilder.</param>
-        /// <returns>A configured WebApplication instance.</returns>
+        /// <param name="args">Command-line arguments for the application</param>
+        /// <param name="webAppBuilder">An optional action to customize the WebApplicationBuilder</param>
+        /// <returns>A configured WebApplication instance</returns>
         public static WebApplication Create(
             string[] args,
             Action<WebApplicationBuilder> webAppBuilder = null)
@@ -40,16 +39,20 @@ namespace PositionManagement.Shared.DependencyInjection
         }
 
         /// <summary>
-        /// Configures and starts the provided WebApplication instance with default middleware and routing.
+        /// Configures and starts the provided WebApplication instance with default middleware and routing
         /// </summary>
-        /// <param name="webApp">The WebApplication instance to configure and run.</param>
-        /// <param name="configureMiddleware">An optional action to add custom middleware to the pipeline.</param>
+        /// <param name="webApp">The WebApplication instance to configure and run</param>
+        /// <param name="enableSwaggerDocumentation">Indicates whether Swagger documentation should be enabled</param>
+        /// <param name="configureMiddleware">An optional action to add custom middleware to the pipeline</param>
+        /// <param name="configureSeedDatabase">An optional action to seed the database with initial data</param>
         public static void Run(
             WebApplication webApp,
-            Action<WebApplication> configureMiddleware = null)
+            bool enableSwaggerDocumentation = true,
+            Action<WebApplication> configureMiddleware = null,
+            Action<WebApplication> configureSeedDatabase = null)
         {
             // Check if the application is running in a development environment
-            if (webApp.Environment.IsDevelopment())
+            if (webApp.Environment.IsDevelopment() || enableSwaggerDocumentation)
             {
                 // Enable Swagger for API documentation and testing
                 webApp.UseSwagger();
@@ -70,6 +73,9 @@ namespace PositionManagement.Shared.DependencyInjection
 
             // Map controller endpoints to handle incoming HTTP requests
             webApp.MapControllers();
+
+            // Seed the database with initial data if a seeding action is provided
+            configureSeedDatabase?.Invoke(webApp);
 
             // Start the application and begin listening for incoming requests
             webApp.Run();

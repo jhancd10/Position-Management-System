@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PositionManagement.Application\PositionManagement.Application.csproj" />
     <ProjectReference Include="..\PositionManagement.Infrastructure\PositionManagement.Infrastructure.csproj" />
   </ItemGroup>

@@ -100,12 +100,18 @@ namespace PositionManagement.Infrastructure.Data
                 // Configure the Cellphone property as required with a maximum length of 20 characters
                 entity.Property(e => e.Cellphone)
                       .IsRequired()
-                      .HasMaxLength(20);
+                      .HasMaxLength(15);
 
                 // Configure the Email property as required with a maximum length of 100 characters
                 entity.Property(e => e.Email)
                       .IsRequired()
                       .HasMaxLength(100);
+
+                // Configure the relationship between Recruiter and Positions
+                entity.HasMany(e => e.Positions)
+                      .WithOne(p => p.Recruiter)
+                      .HasForeignKey(p => p.RecruiterId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             // Configure the Department entity
@@ -118,6 +124,12 @@ namespace PositionManagement.Infrastructure.Data
                 entity.Property(e => e.Name)
                       .IsRequired()
                       .HasMaxLength(100);
+
+                // Configure the relationship between Department and Positions
+                entity.HasMany(e => e.Positions)
+                      .WithOne(p => p.Department)
+                      .HasForeignKey(p => p.DepartmentId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }
