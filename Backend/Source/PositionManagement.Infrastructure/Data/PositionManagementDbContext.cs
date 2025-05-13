@@ -71,6 +71,7 @@ namespace PositionManagement.Infrastructure.Data
 
                 // Configure the Budget property as required
                 entity.Property(e => e.Budget)
+                      .HasPrecision(18, 2)
                       .IsRequired();
 
                 // Configure the relationship between Position and Recruiter with a foreign key

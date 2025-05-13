@@ -27,7 +27,7 @@ namespace PositionManagement.Infrastructure.DependencyInjection
             services.AddSwaggerServices(configuration["ApiKey:Header"]);
 
             // Register the application's database context in the DI container
-            services.AddDbContext();
+            services.AddDbContext(configuration);
 
             // Register the application's repositories in the DI container
             services.AddRepository();

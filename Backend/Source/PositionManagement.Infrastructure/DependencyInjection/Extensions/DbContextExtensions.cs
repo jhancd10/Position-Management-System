@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PositionManagement.Infrastructure.Data;
 using PositionManagement.Infrastructure.Data.Seed;
@@ -16,12 +17,19 @@ namespace PositionManagement.Infrastructure.DependencyInjection.Extensions
         /// </summary>
         /// <param name="services">The service collection to which the DbContext will be added</param>
         /// <returns>The updated service collection</returns>
-        public static IServiceCollection AddDbContext(this IServiceCollection services)
+        public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             // Adds the PositionManagementDbContext to the service collection
             // Configures it to use an in-memory database named "PositionManagementDb"
+            //services.AddDbContext<PositionManagementDbContext>(
+            //    options => options.UseInMemoryDatabase("PositionManagementDb")
+            //);
+
             services.AddDbContext<PositionManagementDbContext>(
-                options => options.UseInMemoryDatabase("PositionManagementDb")
+                options => options.UseSqlServer(
+                    configuration.GetConnectionString("PositionManagementConnection"), 
+                    sql => sql.MigrationsAssembly("PositionManagement.Infrastructure")
+                )
             );
 
             // Returns the updated service collection
